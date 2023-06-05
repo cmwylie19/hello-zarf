@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: zarf-practice
+  name: zarf-practice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zarf-practice
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: zarf-practice
+    spec:
+      containers:
+      - image: docker.io/cmwylie19/zarf-practice
+        name: zarf-practice
+        command: ["./zarf-practice"]
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: zarf-practice
+  name: zarf-practice
+spec:
+  ports:
+  - port: 8081
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app: zarf-practice
+status:
+  loadBalancer: {}
+
