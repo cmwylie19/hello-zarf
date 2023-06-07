@@ -1,3 +1,3 @@
-module github.com/cmwylie19/zarf-practice
+module github.com/cmwylie19/hello-zarf
 
 go 1.20

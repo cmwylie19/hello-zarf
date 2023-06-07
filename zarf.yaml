@@ -6,13 +6,13 @@ metadata:
   version: 0.0.1
 
 components:
-  - name: zarf-practice
+  - name: hello-zarf
     required: true
     charts:
-      - name: zarf-practice
+      - name: hello-zarf
         version: 0.1.0
         namespace: default
-        localPath: zarf-practice-chart
+        localPath: hello-zarf-chart
     # images:
     #   - ghcr.io/stefanprodan/podinfo:6.3.5
     # actions:

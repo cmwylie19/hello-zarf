@@ -11,25 +11,25 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: zarf-practice
-  name: zarf-practice
+    app: hello-zarf
+  name: hello-zarf
   namespace: webserver
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: zarf-practice
+      app: hello-zarf
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: zarf-practice
+        app: hello-zarf
     spec:
       containers:
-      - image: docker.io/cmwylie19/zarf-practice
-        name: zarf-practice
-        command: ["./zarf-practice"]
+      - image: docker.io/cmwylie19/hello-zarf
+        name: hello-zarf
+        command: ["./hello-zarf"]
         resources: {}
 status: {}
 ---
@@ -38,8 +38,8 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    app: zarf-practice
-  name: zarf-practice
+    app: hello-zarf
+  name: hello-zarf
   namespace: webserver
 spec:
   ports:
@@ -47,7 +47,7 @@ spec:
     protocol: TCP
     targetPort: 8081
   selector:
-    app: zarf-practice
+    app: hello-zarf
 status:
   loadBalancer: {}
 

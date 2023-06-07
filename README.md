@@ -1,6 +1,6 @@
-# Zarf Practice Tutorial
+# Hello Zarf Tutorial
 
-_This repo contains a basic webserver to be deployed by [Zarf](https://github.com/defenseunicorns/zarf.git). The webserver has a `k8s` folder with Kubernetes manifests and a `zarf-practice-chart` folder with a helm chart. The first step is to spin up a Kind cluster and initialize Zarf._
+_This repo contains a basic webserver to be deployed by [Zarf](https://github.com/defenseunicorns/zarf.git). The webserver has a `k8s` folder with Kubernetes manifests and a `hello-zarf-chart` folder with a helm chart. The first step is to spin up a Kind cluster and initialize Zarf._
 
 **TOC**
 - [Prerequisites](#prerequisites)
@@ -29,26 +29,26 @@ _This step is to show you what you will be looking for Zarf to deploy._
 ```bash
 kubectl create -f k8s/
 sleep 2
-kubectl wait pod --for=condition=Ready -l app=zarf-practice --timeout=180s -n webserver
+kubectl wait pod --for=condition=Ready -l app=hello-zarf --timeout=180s -n webserver
 ```
 
 Ensure pod,svc are running.   
 
 ```bash
-kubectl get svc,po -n webserver -l app=zarf-practice
+kubectl get svc,po -n webserver -l app=hello-zarf
 # output
 NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-service/zarf-practice   ClusterIP   10.96.191.232   <none>        8081/TCP   5s
+service/hello-zarf   ClusterIP   10.96.191.232   <none>        8081/TCP   5s
 
 NAME                                 READY   STATUS    RESTARTS   AGE
-pod/zarf-practice-7dd8746449-x8m7r   1/1     Running   0          5s
+pod/hello-zarf-7dd8746449-x8m7r   1/1     Running   0          5s
 ```
 
 
 Curl against service to ensure app is working.   
 
 ```bash
-kubectl run curler --image=nginx:alpine --rm -it --restart=Never  -- curl zarf-practice.webserver.svc.cluster.local:8081/hi
+kubectl run curler --image=nginx:alpine --rm -it --restart=Never  -- curl hello-zarf.webserver.svc.cluster.local:8081/hi
 #output 
 Let's kick Zarf's tires!🦄pod "curler" deleted
 ```
@@ -56,7 +56,7 @@ Let's kick Zarf's tires!🦄pod "curler" deleted
 Clean up the manual deployment,svc,and pod
 
 ```bash
-kubectl delete deploy,svc,po -l app=zarf-practice -n webserver --force --grace-period=0
+kubectl delete deploy,svc,po -l app=hello-zarf -n webserver --force --grace-period=0
 
 kubectl delete ns webserver
 ```
@@ -106,20 +106,20 @@ metadata:
   version: 0.0.1
 
 components:
-  - name: zarf-practice-chart
+  - name: hello-zarf-chart
     required: true
     charts:
-      - name: zarf-practice-chart
+      - name: hello-zarf-chart
         version: 0.1.0
         namespace: default
         localPath: .
     images:
-      - docker.io/cmwylie19/zarf-practice
+      - docker.io/cmwylie19/hello-zarf
       - busybox      
 EOF
 ```
 ```bash
-zarf package create zarf-practice-chart
+zarf package create hello-zarf-chart
 ```
 
 # Cleanup

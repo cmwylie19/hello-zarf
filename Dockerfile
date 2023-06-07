@@ -1,7 +1,7 @@
 # Stage 1
 FROM scratch
 
-LABEL description="zarf-practice" \
+LABEL description="hello-zarf" \
       maintainer="Casey Wylie casewylie@gmail.com"
 
-COPY ./zarf-practice /
+COPY ./hello-zarf /

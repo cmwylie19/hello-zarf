@@ -6,15 +6,15 @@ metadata:
   version: 0.0.1
 
 components:
-  - name: zarf-practice-chart
+  - name: hello-zarf-chart
     required: true
     charts:
-      - name: zarf-practice-chart
+      - name: hello-zarf-chart
         version: 0.1.0
         namespace: default
         localPath: .
     images:
-      - docker.io/cmwylie19/zarf-practice
+      - docker.io/cmwylie19/hello-zarf
       - busybox
     # actions:
     #   onDeploy:
