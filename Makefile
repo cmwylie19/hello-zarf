@@ -3,7 +3,7 @@
 
 IMAGE ?= cmwylie19/zarf-practice:latest
 
-.PHONY: image/zarf-practice
+.PHONY: binary
 binary:  
 	GOARCH=amd64 CGO_ENABLED=0 GOOS=linux go build -o zarf-practice ./main.go
 
@@ -16,4 +16,5 @@ docker-image:
 push-image: 
 	docker push $(IMAGE)
 
-.PHONY: all
+
+all: binary docker-image push-image 
