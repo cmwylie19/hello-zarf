@@ -8,7 +8,7 @@ import (
 
 func main() {
 
-	http.HandleFunc("/hi", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Let's kick Zarf's tires!🦄")
 	})
 

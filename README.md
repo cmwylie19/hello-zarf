@@ -6,7 +6,7 @@ _This repo contains a basic webserver to be deployed by [Zarf](https://github.co
 - [Prerequisites](#prerequisites)
 - [Create Cluster](#create-cluster)
 - [Deploy without Zarf](#deploy-webserver-without-zarf)
-- [Deploy with Zarf through Helm](#deploy-with-zarf-through-helm)
+- [Deploy Helm chart with Zarf](#deploy-helm-chart-with-zarf)
 - [Cleanup](#cleanup)
 
 
@@ -32,7 +32,7 @@ sleep 2
 kubectl wait pod --for=condition=Ready -l app=hello-zarf --timeout=180s -n webserver
 ```
 
-Ensure pod,svc are running.   
+Check pod and service are running.   
 
 ```bash
 kubectl get svc,po -n webserver -l app=hello-zarf
@@ -92,12 +92,12 @@ kubectl get secret -n zarf zarf-package-init  --template='{{.data.data}}' | base
 You will see configmaps `zarf-payload-xxx`, which are partial OCI images of the deployed packages.
 
 
-## Deploy with Zarf through Helm
+## Deploy Helm Chart with Zarf
 
 To create a zarf package, you must create a `ZarfPackageConfig`.
 
 ```yaml
-cat << EOF > zarf.yaml
+cat << EOF > hello-zarf-chart/zarf.yaml
 kind: ZarfPackageConfig
 metadata:
   name: helm-chart
@@ -109,19 +109,69 @@ components:
   - name: hello-zarf-chart
     required: true
     charts:
+      # Must match name in Chart.yaml
       - name: hello-zarf-chart
+      # Must match version in Chart.yaml
         version: 0.1.0
         namespace: default
         localPath: .
+    # Must include images in helm chart
     images:
       - docker.io/cmwylie19/hello-zarf
       - busybox      
 EOF
 ```
+
+Notice, we MUST have correspoding names, and images from the helm chart's `Chart.yaml`, and clearly define the images in `ZarfPackageConfig`.
+
+Create the zarf package. (Press enter twice at the prompts to create the package and use the default of 0 for "Maximum Package Size")
+
 ```bash
 zarf package create hello-zarf-chart
 ```
 
+Deploy the zarf package 
+
+```bash
+zarf package deploy
+```
+
+Wait for the app to be ready
+
+```bash
+kubectl wait pod --for=condition=Ready -l app=hello-zarf --timeout=180s -n webserver
+```
+
+Check pod and service are running.   
+
+```bash
+kubectl get svc,po -n webserver -l app=hello-zarf
+# output
+NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/hello-zarf   ClusterIP   10.96.191.232   <none>        8081/TCP   5s
+
+NAME                                 READY   STATUS    RESTARTS   AGE
+pod/hello-zarf-7dd8746449-x8m7r   1/1     Running   0          5s
+```
+
+
+Curl against service to ensure app is working.   
+
+```bash
+kubectl run curler --image=nginx:alpine --rm -it --restart=Never  -- curl hello-zarf.webserver.svc.cluster.local:8081/hi
+#output 
+Let's kick Zarf's tires!🦄pod "curler" deleted
+```
+
+Clean up the manual deployment,svc,and pod
+
+```bash
+kubectl delete deploy,svc,po -l app=hello-zarf -n webserver --force --grace-period=0
+
+kubectl delete ns webserver
+```
+
+Press [tab] for suggestions, it should be something like `zarf-package-helm-chart-[arch]-0.0.1.tar.zst`
 # Cleanup
 
 ```bash
