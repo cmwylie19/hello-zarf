@@ -109,9 +109,15 @@ Curl against service to ensure app is working.
 
 ```bash
 kubectl run curler --image=nginx:alpine --rm -it --restart=Never  -- curl hello-zarf.webserver.svc.cluster.local:8081/hi
+```
+
+output
+
+```bash
 #output 
 Let's kick Zarf's tires!🦄pod "curler" deleted
 ```
+
 
 Clean up the manual deployment,svc,and pod
 
