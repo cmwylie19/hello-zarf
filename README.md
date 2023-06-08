@@ -232,7 +232,10 @@ split into multiple files. 0 will disable this feature.
   ✔  Creating SBOMs for 2 images and 0 components with files.
 ```
 
-Deploy the zarf package [Press Tab], then (y)
+This creates a compressed zarf package in the root directory that containing all of the bundled manifests and images: `zarf-package-helm-chart-[arch]-0.0.1.tar.zst`.  
+
+
+Deploy the zarf package in the cluster with `zarf package deploy`, [Press Tab] to find the correct artifact, then (y) to deploy.
 
 ```bash
 zarf package deploy
@@ -355,6 +358,7 @@ components:
       - docker.io/cmwylie19/hello-zarf
 EOF
 ```
+
 
 Create the zarf package by poiting zarf to `k8s/zarf.yaml`. (Press y to create the package and "Maximum Package Size" 0 or press enter )
 
