@@ -15,7 +15,13 @@ _This repo contains a basic webserver to be deployed by [Zarf](https://github.co
 
 - [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
 - [Zarf CLI](https://docs.zarf.dev/docs/the-zarf-cli/)
-- [jq](https://jqlang.github.io/jq/download/)
+- [jq (Nice to have)](https://jqlang.github.io/jq/download/)
+
+For the easiest way to get started on mac:
+
+``bash
+brew tap defenseunicorns/tap && brew install zarf
+```
 
 ## Create Cluster 
 
@@ -1202,9 +1208,10 @@ Deploy the zarf package in the cluster with `zarf package deploy`, [Press Tab] t
 
 ```bash
 zarf package deploy
+```
 
-# output
-
+output
+```bash
 Saving log file to
 /var/folders/v0/slmrzc4s6kx4n7jb77ch9fc80000gn/T/zarf-2023-06-08-08-24-11-1716764624.log
 ? Choose or type the package file zarf-package-helm-chart-arm64-0.0.1.tar.zst
@@ -1269,12 +1276,15 @@ Check pod and service are running.
 
 ```bash
 kubectl get svc,po -n webserver -l app=hello-zarf
-# output
-NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-service/hello-zarf   ClusterIP   10.96.191.232   <none>        8081/TCP   5s
+```
 
-NAME                                 READY   STATUS    RESTARTS   AGE
-pod/hello-zarf-7dd8746449-x8m7r   1/1     Running   0          5s
+output
+```bash
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/hello-zarf   ClusterIP   10.96.125.229   <none>        8081/TCP   32s
+
+NAME                             READY   STATUS    RESTARTS   AGE
+pod/hello-zarf-c558dd559-6zhtt   1/1     Running   0          32s
 ```
 
 
@@ -1282,7 +1292,10 @@ Curl against service to ensure app is working.
 
 ```bash
 kubectl run curler --image=nginx:alpine --rm -it --restart=Never  -- curl hello-zarf.webserver.svc.cluster.local:8081/hi
-#output 
+```
+
+output
+```bash 
 Let's kick Zarf's tires!🦄pod "curler" deleted
 ```
 
@@ -1296,9 +1309,9 @@ kubectl delete ns webserver
 
 ## Deploy Kubernetes manifests with Zarf
 
-We create a new ZarfPackageConfig to deploy the manifests.
+We create a new `ZarfPackageConfig` to package and deploy manifests.
 
-We MUST define images from kubernetes manifests in the images section of `ZarfPackageConfig`.
+We MUST define images and files for kubernetes manifests in the images and manifests sections of `ZarfPackageConfig`.
 
 Create the zarf package. (Press enter twice at the prompts to create the package and use the default of 0 for "Maximum Package Size")
 
@@ -1315,9 +1328,11 @@ components:
     description: Does a kubectl create -f on the k8s folder
     # prompt the user to create package?
     required: true
+    # new
     manifests:
       - name: k8s-folder
         namespace: webserver
+        # webserver deployment, svc
         files:
           - zarf-practice.yaml
     # required to tell zarf where your image lives
@@ -1331,8 +1346,10 @@ Create the zarf package by poiting zarf to `k8s/zarf.yaml`. (Press y to create t
 
 ```bash
 zarf package create k8s
+```
 
-# output
+output
+```bash
 Saving log file to
 /var/folders/v0/slmrzc4s6kx4n7jb77ch9fc80000gn/T/zarf-2023-06-08-08-36-41-3715853135.log
 
@@ -1379,13 +1396,124 @@ split into multiple files. 0 will disable this feature.
   ✔  Creating SBOMs for 1 images and 0 components with files.  
 ```
 
-Deploy the zarf package [Press Tab], then (y)
+Deploy the zarf package [Press Tab], select the `zarf-package-k8s-manifests-*-0.0.1.tar.zst`, then (y)
 
 ```bash
 zarf package deploy
+```
 
-# output
+output
 
+```bash
+
+Saving log file to
+? Choose or type the package file zarf-package-k8s-manifests-arm64-0.0.1.tar.zst
+
+  ✔  All of the checksums matched!                                                                                            
+  ✔  Loading Zarf Package zarf-package-k8s-manifests-arm64-0.0.1.tar.zst                                                      
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+kind: ZarfPackageConfig
+metadata:
+  name: k8s-manifests
+  description: |
+    A Zarf package that deploys kubernetes manifests
+  version: 0.0.1
+  architecture: arm64
+  aggregateChecksum: efb8c3270eae3dc9fc1053c9146284fc37abcd6ef3f2e7aa422b74f3c6b5144a
+build:
+  terminal: Cases-MacBook-Pro.local
+  user: cmwylie19
+  architecture: arm64
+  timestamp: Thu, 08 Jun 2023 09:39:07 -0400
+  version: v0.26.4
+  migrations:
+  - scripts-to-actions
+  - pluralize-set-variable
+  differential: false
+  registryOverrides: {}
+components:
+- name: k8s-folder
+  description: Does a kubectl create -f on the k8s folder
+  required: true
+  manifests:
+  - name: k8s-folder
+    namespace: webserver
+    files:
+    - zarf-practice.yaml
+  images:
+  - docker.io/cmwylie19/hello-zarf
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This package has 1 artifacts with software bill-of-materials (SBOM) included. You can view them now
+in the zarf-sbom folder in this directory or to go directly to one, open this in your browser:
+/Users/cmwylie19/hello-zarf/zarf-sbom/sbom-viewer-docker.io_cmwylie19_hello-zarf.html
+
+* This directory will be removed after package deployment.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+? Deploy this Zarf package? Yes
+
+                                                                                       
+  📦 K8S-FOLDER COMPONENT                                                              
+                                                                                       
+
+  ✔  Waiting for cluster connection (30s timeout)                                                                             
+  ✔  Loading the Zarf State from the Kubernetes cluster                                                                       
+  ✔  Pushed 1 images to the zarf registry                                                                                     
+  ✔  Starting helm chart generation k8s-folder                                                                                
+  ✔  Processing helm chart raw-k8s-manifests-k8s-folder-k8s-folder:0.1.1686231570 from Zarf-generated helm chart              
+  ✔  Zarf deployment complete
+
+```
+
+
+
+Wait for the app to be ready
+
+```bash
+kubectl wait pod --for=condition=Ready -l app=hello-zarf --timeout=180s -n webserver
+```
+
+Check pod and service are running.   
+
+```bash
+kubectl get svc,po -n webserver -l app=hello-zarf
+```
+
+output
+```bash
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/hello-zarf   ClusterIP   10.96.125.229   <none>        8081/TCP   32s
+
+NAME                             READY   STATUS    RESTARTS   AGE
+pod/hello-zarf-c558dd559-6zhtt   1/1     Running   0          32s
+```
+
+
+Curl against service to ensure app is working.   
+
+```bash
+kubectl run curler --image=nginx:alpine --rm -it --restart=Never  -- curl hello-zarf.webserver.svc.cluster.local:8081/hi
+```
+
+output
+```bash 
+Let's kick Zarf's tires!🦄pod "curler" deleted
+```
+
+Clean up the manual deployment,svc,and pod
+
+```bash
+kubectl delete deploy,svc,po -l app=hello-zarf -n webserver --force --grace-period=0
+
+kubectl delete ns webserver
+```
+
+This is only scratching the capability of zarf, there are hooks, actions and more features not listed in this initial tutorial. Go to [zarf.dev](https://zarf.dev) to read more.
 
 # Cleanup
 
