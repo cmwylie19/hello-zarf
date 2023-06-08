@@ -132,7 +132,7 @@ kubectl delete deploy,svc,po -l app=hello-zarf -n webserver --force --grace-peri
 kubectl delete ns webserver
 ```
 
-Next, we will deploy the werbserver through the helm chart with Zarf
+Next, we will deploy the webserver through the helm chart with Zarf
 
 ## Install Zarf in the cluster
 
