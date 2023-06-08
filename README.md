@@ -92,6 +92,11 @@ Check pod and service are running.
 
 ```bash
 kubectl get svc,po -n webserver -l app=hello-zarf
+```
+
+output
+
+```bashß
 # output
 NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
 service/hello-zarf   ClusterIP   10.96.191.232   <none>        8081/TCP   5s
@@ -99,7 +104,6 @@ service/hello-zarf   ClusterIP   10.96.191.232   <none>        8081/TCP   5s
 NAME                                 READY   STATUS    RESTARTS   AGE
 pod/hello-zarf-7dd8746449-x8m7r   1/1     Running   0          5s
 ```
-
 
 Curl against service to ensure app is working.   
 
