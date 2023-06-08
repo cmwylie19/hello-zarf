@@ -7,6 +7,7 @@ _This repo contains a basic webserver to be deployed by [Zarf](https://github.co
 - [Create Cluster](#create-cluster)
 - [Deploy without Zarf](#deploy-webserver-without-zarf)
 - [Deploy Helm chart with Zarf](#deploy-helm-chart-with-zarf)
+- [Deploy Kubernetes manifests with Zarf](#deploy-kubernetes-manifests-with-zarf)
 - [Cleanup](#cleanup)
 
 
@@ -127,14 +128,115 @@ Notice, we MUST have correspoding names, and images from the helm chart's `Chart
 Create the zarf package. (Press enter twice at the prompts to create the package and use the default of 0 for "Maximum Package Size")
 
 ```bash
-zarf package create hello-zarf-chart
+└─[0] <git:(main 5136259✗✱✈) > zarf package create hello-zarf-chart
+
+# output 
+Saving log file to
+/var/folders/v0/slmrzc4s6kx4n7jb77ch9fc80000gn/T/zarf-2023-06-07-18-12-58-3447967329.log
+
+Using build directory hello-zarf-chart
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+kind: ZarfPackageConfig
+metadata:
+  name: helm-chart
+  description: |
+    A Zarf package that deploys a helm chart
+  version: 0.0.1
+components:
+- name: hello-zarf-chart
+  required: true
+  charts:
+  - name: hello-zarf-chart
+    version: 0.1.0
+    namespace: default
+    localPath: .
+  images:
+  - docker.io/cmwylie19/hello-zarf
+  - busybox
+
+? Create this Zarf package? Yes
+
+Specify a maximum file size for this package in Megabytes. Above this size, the package will be
+split into multiple files. 0 will disable this feature.
+? Please provide a value for "Maximum Package Size" 0
+
+                                                                                       
+  📦 HELLO-ZARF-CHART COMPONENT                                                        
+                                                                                       
+
+  ✔  Processing helm chart hello-zarf-chart:0.1.0 from .                                                               
+
+                                                                                       
+  📦 COMPONENT IMAGES                                                                  
+                                                                                       
+
+  ✔  Loading metadata for 2 images.                                                                                    
+  ✔  Pulling 2 images (5.80 MBs)                                                                                       
+  ✔  Creating SBOMs for 2 images and 0 components with files.
 ```
 
-Deploy the zarf package 
+Deploy the zarf package [Press Tab], then (y)
 
 ```bash
 zarf package deploy
+
+# output
+
+Saving log file to
+/var/folders/v0/slmrzc4s6kx4n7jb77ch9fc80000gn/T/zarf-2023-06-08-08-24-11-1716764624.log
+? Choose or type the package file zarf-package-helm-chart-arm64-0.0.1.tar.zst
+
+  ✔  All of the checksums matched!                                                                                     
+  ✔  Loading Zarf Package zarf-package-helm-chart-arm64-0.0.1.tar.zst                                                  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+kind: ZarfPackageConfig
+metadata:
+  name: helm-chart
+  description: |
+    A Zarf package that deploys a helm chart
+  version: 0.0.1
+  architecture: arm64
+  aggregateChecksum: 4c7ad2aeb4a75dcdef62862cad89a7b20f5a09fd632b082aff7ab6c57d99455c
+build:
+  terminal: Cases-MacBook-Pro.local
+  user: cmwylie19
+  architecture: arm64
+  timestamp: Wed, 07 Jun 2023 18:13:04 -0400
+  version: v0.26.4
+  migrations:
+  - scripts-to-actions
+  - pluralize-set-variable
+  differential: false
+  registryOverrides: {}
+components:
+- name: hello-zarf-chart
+  required: true
+  charts:
+  - name: hello-zarf-chart
+    version: 0.1.0
+    namespace: default
+    localPath: .
+  images:
+  - docker.io/cmwylie19/hello-zarf
+  - busybox
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This package has 2 artifacts with software bill-of-materials (SBOM) included. You can view them now
+in the zarf-sbom folder in this directory or to go directly to one, open this in your browser:
+/Users/cmwylie19/hello-zarf/zarf-sbom/sbom-viewer-busybox.html
+
+* This directory will be removed after package deployment.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+? Deploy this Zarf package? (y/N) 
 ```
+
 
 Wait for the app to be ready
 
@@ -171,9 +273,98 @@ kubectl delete deploy,svc,po -l app=hello-zarf -n webserver --force --grace-peri
 kubectl delete ns webserver
 ```
 
-Press [tab] for suggestions, it should be something like `zarf-package-helm-chart-[arch]-0.0.1.tar.zst`
+## Deploy Kubernetes manifests with Zarf
+
+We create a new ZarfPackageConfig to deploy the manifests. _Notice the structure is not quite as rigid when deploying manifests as there is no need for matching versions._
+
+```yaml
+cat << EOF > k8s/zarf.yaml
+kind: ZarfPackageConfig
+metadata:
+  name: k8s-manifests
+  description: |
+    A Zarf package that deploys kubernetes manifests
+  version: 0.0.1
+components:
+  - name: k8s-folder
+    description: Does a kubectl create -f on the k8s folder
+    # prompt the user to create package?
+    required: true
+    manifests:
+      - name: k8s-folder
+        namespace: webserver
+        files:
+          - zarf-practice.yaml
+    # required to tell zarf where your image lives
+    images:
+      - docker.io/cmwylie19/hello-zarf
+EOF
+```
+
+Create the zarf package by poiting zarf to `k8s/zarf.yaml`. (Press y to create the package and "Maximum Package Size" 0 or press enter )
+
+```bash
+└─[1] <git:(main 3abd6af✱✈) > zarf package create k8s
+
+# output
+Saving log file to
+/var/folders/v0/slmrzc4s6kx4n7jb77ch9fc80000gn/T/zarf-2023-06-08-08-36-41-3715853135.log
+
+Using build directory k8s
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+kind: ZarfPackageConfig
+metadata:
+  name: k8s-manifests
+  description: |
+    A Zarf package that deploys kubernetes manifests
+  version: 0.0.1
+components:
+- name: k8s-folder
+  description: Does a kubectl create -f on the k8s folder
+  required: true
+  manifests:
+  - name: k8s-folder
+    namespace: webserver
+    files:
+    - zarf-practice.yaml
+  images:
+  - docker.io/cmwylie19/hello-zarf
+
+? Create this Zarf package? Yes
+
+Specify a maximum file size for this package in Megabytes. Above this size, the package will be
+split into multiple files. 0 will disable this feature.
+? Please provide a value for "Maximum Package Size" 0
+
+                                                                                       
+  📦 K8S-FOLDER COMPONENT                                                              
+                                                                                       
+
+  ✔  Loading 1 K8s manifests                                                                                                                                     
+
+                                                                                       
+  📦 COMPONENT IMAGES                                                                  
+                                                                                       
+
+  ✔  Loading metadata for 1 images.                                                                                                                              
+  ✔  Pulling 1 images (3.80 MBs)                                                                                                                                 
+  ✔  Creating SBOMs for 1 images and 0 components with files.  
+```
+
+Deploy the zarf package [Press Tab], then (y)
+
+```bash
+zarf package deploy
+
+# output
+
+
 # Cleanup
 
 ```bash
 kind delete cluster --name=zarf
 ```
+
+[TOP](#hello-zarf-tutorial)
