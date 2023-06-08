@@ -512,7 +512,7 @@ Registry    | zarf-push | WjMx4wfduHbOz8Pk2UJ5oF56 | zarf connect registry
 you can skip to [the helm chart deployment of the webserver if you like](#deploy-helm-chart-with-zarf), as we have successfully initialized `zarf` in the cluster.  
   
 
-After `zarf init` you will see an image registry pod in the zarf namespace, used to store images packed images  which are later saved in the final compressed tarball  (similar to a `docker save <image repo>/<user>/<container> -o <container>.tar`). There will be two replicas of the `agent-hook`, a mutating webhook that renames the images from the previous image registry like docker.io to the internal image registry deployed in the namespace. 
+After `zarf init` you will see an image registry pod in the zarf namespace, used to store images which are later saved in the final compressed tarball  (similar to a `docker save <image repo>/<user>/<container> -o <container>.tar`). There will be two replicas of the `agent-hook`, a mutating webhook that renames the images from the previous image registry like docker.io to the internal image registry deployed in the namespace. 
 
 ```bash
 kubectl get po -n zarf
@@ -527,7 +527,7 @@ agent-hook-6f879d6866-bpdjm             1/1     Running   0          5m28s
 zarf-docker-registry-86d76d95b7-7cb8f   1/1     Running   0          5m34s
 ```
 
-You will also see a `zarf-state` secret which  contains the credentials for components Zarf uses.
+Also a `zarf-state` secret which contains the credentials for components Zarf uses.
 
 ```bash
 kubectl get secret zarf-state -n zarf --template='{{.data.state}}' | base64 -d  | jq
@@ -582,7 +582,7 @@ kubectl get secret -n zarf zarf-package-init  --template='{{.data.data}}' | base
 
 output
 
-```yaml
+```json
 {
   "name": "init",
   "data": {
@@ -1105,6 +1105,8 @@ zarf-payload-009   1      7m45s
 zarf-payload-010   1      7m44s
 zarf-payload-011   1      7m44s
 ```
+
+To read more about the internals of zarf, checkout the [Nerd Notes](https://docs.zarf.dev/docs/contribute-to-zarf/nerd-notes).  
 
 ## Deploy Helm Chart with Zarf
 
