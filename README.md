@@ -27,9 +27,64 @@ kind create cluster --name=zarf
 
 _This step is to show you what you will be looking for Zarf to deploy._
  
-```bash
-kubectl create -f k8s/
+```yaml
+kubectl create -f -<<EOF
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: webserver
+spec: {}
+status: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: hello-zarf
+  name: hello-zarf
+  namespace: webserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-zarf
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: hello-zarf
+    spec:
+      containers:
+      - image: docker.io/cmwylie19/hello-zarf
+        name: hello-zarf
+        command: ["./hello-zarf"]
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: hello-zarf
+  name: hello-zarf
+  namespace: webserver
+spec:
+  ports:
+  - port: 8081
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app: hello-zarf
+status:
+  loadBalancer: {}
+EOF
+# Sleep so we can wait for condition=Ready
 sleep 2
+# wait for it...
 kubectl wait pod --for=condition=Ready -l app=hello-zarf --timeout=180s -n webserver
 ```
 

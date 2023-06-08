@@ -1,3 +1,4 @@
 *.zst
 */zarf.yaml
-hello-zarf
+hello-*
+zarf-pack*
