@@ -183,7 +183,7 @@ Notice, we MUST have correspoding names, and images from the helm chart's `Chart
 Create the zarf package. (Press enter twice at the prompts to create the package and use the default of 0 for "Maximum Package Size")
 
 ```bash
-└─[0] <git:(main 5136259✗✱✈) > zarf package create hello-zarf-chart
+zarf package create hello-zarf-chart
 
 # output 
 Saving log file to
@@ -363,7 +363,7 @@ EOF
 Create the zarf package by poiting zarf to `k8s/zarf.yaml`. (Press y to create the package and "Maximum Package Size" 0 or press enter )
 
 ```bash
-└─[1] <git:(main 3abd6af✱✈) > zarf package create k8s
+zarf package create k8s
 
 # output
 Saving log file to
