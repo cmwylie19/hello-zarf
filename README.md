@@ -96,13 +96,13 @@ kubectl get svc,po -n webserver -l app=hello-zarf
 
 output
 
-```bashß
+```bash
 # output
-NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-service/hello-zarf   ClusterIP   10.96.191.232   <none>        8081/TCP   5s
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/hello-zarf   ClusterIP   10.96.168.209   <none>        8081/TCP   83s
 
-NAME                                 READY   STATUS    RESTARTS   AGE
-pod/hello-zarf-7dd8746449-x8m7r   1/1     Running   0          5s
+NAME                             READY   STATUS    RESTARTS   AGE
+pod/hello-zarf-c558dd559-gppvt   1/1     Running   0          83s
 ```
 
 Curl against service to ensure app is working.   
