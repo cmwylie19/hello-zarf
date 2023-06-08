@@ -1,4 +1,7 @@
 */zarf.yaml
-./hello-zarf
-./zarf-package-helm-chart-*-0.0.1.tar.zst
-./zarf-package-k8s-manifests-*-0.0.1.tar.zst
+hello-zarf
+zarf-package-helm-chart-*-0.0.1.tar.zst
+zarf-package-k8s-manifests-*-0.0.1.tar.zst
+
+!/**/
+!*.*
