@@ -6,6 +6,7 @@ _This repo contains a basic webserver to be deployed by [Zarf](https://github.co
 - [Prerequisites](#prerequisites)
 - [Create Cluster](#create-cluster)
 - [Deploy without Zarf](#deploy-webserver-without-zarf)
+- [Install Zarf in the cluster](#install-zarf-in-the-cluster)
 - [Deploy Helm chart with Zarf](#deploy-helm-chart-with-zarf)
 - [Deploy Kubernetes manifests with Zarf](#deploy-kubernetes-manifests-with-zarf)
 - [Cleanup](#cleanup)
@@ -1146,7 +1147,7 @@ EOF
 
 We MUST have correspoding names, versions, and images from the helm chart's `Chart.yaml` file, and define the images in `ZarfPackageConfig`.
 
-Create the zarf package. (Press enter twice at the prompts to create the package and use the default of 0 for "Maximum Package Size")
+Create the zarf package. (Press (y) at the prompts to create the package and use the default of 0 for "Maximum Package Size")
 
 ```bash
 zarf package create hello-zarf-chart
