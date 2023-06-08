@@ -97,7 +97,6 @@ kubectl get svc,po -n webserver -l app=hello-zarf
 output
 
 ```bash
-# output
 NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
 service/hello-zarf   ClusterIP   10.96.168.209   <none>        8081/TCP   83s
 
@@ -131,11 +130,387 @@ Next, we will deploy the werbserver through the helm chart with Zarf
 
 ## Install Zarf in the cluster
 
-Running `zarf init` installs Zarf onto the target cluster.
+Running `zarf init` installs Zarf onto the target cluster. After `zarf-init` press (Y) to install the package, (n) for logging, and (n) for gitea
 
 ```bash
 zarf init 
 ```
+
+output
+
+```bash
+Saving log file to
+/var/folders/v0/slmrzc4s6kx4n7jb77ch9fc80000gn/T/zarf-2023-06-08-09-11-52-2308707066.log
+
+         *,                                                                              
+         *(((&&&&&/*.                                                                    
+          *(((((%&&&&&&&*,                                                               
+           *(((((((&&&&&&&&&*              ,,*****,.                      **%&&&&&(((((( 
+            *(((((((((&&&&&&&@*    **@@@@@@&&&&&&&&&&@@@@@**         */&&&&&&((((((((((  
+              *((((((///(&&&&&&@@@@&&&&@@@@@@@@@&&&&&&&&&&&&&&@/* *%&&&&&&/////((((((*   
+                *(((///////&&&&&&&&&&&&&@@@@@@@@@&&&&&&&&&&&&&&&&&(%&&&/**///////(/*     
+       */&&&&&&&&&&&&&&&&*/***&%&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&/*******///*         
+   *&%&&&&&&&&&&&&&&&&&&&&&&&***&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&****/&&&&&&&&&&&&(/*
+ */((((((((((((((///////******%%&&&&&&&&//&@@*&&&&&&&&&&&&&&&&&&&#%&&&&*/####(/////((((/.
+     */((((((((((///////******%%%%%%%%%(##@@@//%&%%%%%%%&%&%%&&/(@@(/&&(***///////(((*   
+          ***(((((/////********%%%%%%%/&%***/((%%%%%%%%%%%%%%%%(#&@*%/%%***/////**       
+            *&&%%%%%%//*******%%%%%%%%@@****%%/%%%%%%%%%%%%%%%%%%***@@%%**(%%%&&*        
+          *&&%%%%%(////******/(%%%%%%%@@@**@@&%%%%%%%%%%%%%%%%%(@@*%@@%%*****////%&*     
+        *&%%%%%#////////***/////%%%%%%*@@@@@/%%%%%%%%%%%%%%%%%%%%@@@@%%*****///////((*   
+       *%%%%((((///////*    *////(%%%%%%##%%%%%%%%%%%(%%%%*%%%%%%%%%%%*                  
+      *(((((((/***            */////#%%%%%%%%%%#%%%%%%%%%%%%%%%%%%%%#*                   
+                   %%(           ,*///((%%%%%%%%(**/#%%%##**/%%%%%*                      
+                 %%%&&&&           *///*/(((((########//######**                         
+                 %&&&&&*          *#######(((((((//////((((*                             
+                                  ###%##############(((#####*                            
+                   %@&&          *&#(%######*#########(#####/                            
+                   /&&* ..       ,&#(/%####(*#########/#####/             #%@%&&&        
+             **         &&     ./%##((*&####/(#######(#####*(*            %&&&&&&        
+           *@%%@*             *&#####((((####*(#####(*###(*(##*              ,  %@&      
+          *@%%%%*            *%######((((*%####/*((*%####/*(###*  *                      
+         *@%%%%%%*      *##* **#(###((((///#*#*(((((/#**#((*(##**#,*/##*,    %@&&        
+         *@%%%*%%%*  ****,*##/*#*##(((((((/(((((((((/(((*(((((###########*,  #&&#        
+         *@%%%*(%%%/*   **######(#((..((((((((((((((((((*  ,*(#####(((((*,               
+         *@%%%#(*%%%%*   ,**/####(* */(((((((((((((((((*     ,**,                        
+          *@%%%*(/(%%%%/*     ******(((((((((((*(((((*                                   
+           *@%%%#(((*/%%%%%%##%%*((((((((((((**((((*                                     
+            *@%%%%*(((((((((((((((((((((((*/%*((*.             (&&&(                     
+             ,*%%%%%%*((((((((((((((((**%%%**,                (&                         
+                *%%%%%%%%%(/*****(#%%%%%**                      &%                       
+                   ,**%%%%%%%%%%%%%***                                                   
+                                                                                         
+             ,((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((,          
+                         .....(((((((/////////////////((((((((.....                      
+                                                                                         
+            ///////////////      ///////      *****************  ***************,        
+                    ////.       ///  ////     *///          ***  ****                    
+                 ////,         ///    ////    *///////////////.  /////**/******          
+              /////          //////////////   *///      *///     ///*                    
+           ./////////////// ////         ///  *///        ////   ///*                    
+                                                                                         
+
+
+  ✔  All of the checksums matched!                                                                                            
+  ✔  Loading Zarf Package /Users/cmwylie19/.zarf-cache/zarf-init-arm64-v0.26.4.tar.zst                                        
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+kind: ZarfInitConfig
+metadata:
+  name: init
+  description: Used to establish a new Zarf cluster
+  version: v0.26.4
+  architecture: arm64
+  aggregateChecksum: 1137879a8815937f84327def4b5317e83940305beb6a238b48b8be84f0e5cffc
+build:
+  terminal: fv-az616-317
+  user: runner
+  architecture: arm64
+  timestamp: Wed, 17 May 2023 02:48:30 +0000
+  version: v0.26.4
+  migrations:
+  - scripts-to-actions
+  - pluralize-set-variable
+  differential: false
+  registryOverrides: {}
+components:
+- name: zarf-injector
+  description: |
+    Bootstraps a Kubernetes cluster by cloning a running pod in the cluster and hosting the registry image.
+    Removed and destroyed after the Zarf Registry is self-hosting the registry image.
+  required: true
+  cosignKeyPath: cosign.pub
+  files:
+  - source: sget://defenseunicorns/zarf-injector:arm64-2023-02-09
+    target: "###ZARF_TEMP###/zarf-injector"
+    executable: true
+- name: zarf-seed-registry
+  description: |
+    Deploys the Zarf Registry using the registry image provided by the Zarf Injector.
+  required: true
+  charts:
+  - name: docker-registry
+    releaseName: zarf-docker-registry
+    version: 1.0.0
+    namespace: zarf
+    valuesFiles:
+    - packages/zarf-registry/registry-values.yaml
+    - packages/zarf-registry/registry-values-seed.yaml
+    localPath: packages/zarf-registry/chart
+  images:
+  - library/registry:2.8.2
+- name: zarf-registry
+  description: |
+    Updates the Zarf Registry to use the self-hosted registry image.
+    Serves as the primary docker registry for the cluster.
+  required: true
+  charts:
+  - name: docker-registry
+    releaseName: zarf-docker-registry
+    version: 1.0.0
+    namespace: zarf
+    valuesFiles:
+    - packages/zarf-registry/registry-values.yaml
+    localPath: packages/zarf-registry/chart
+  manifests:
+  - name: registry-connect
+    namespace: zarf
+    files:
+    - packages/zarf-registry/connect.yaml
+  - name: kep-1755-registry-annotation
+    namespace: zarf
+    files:
+    - packages/zarf-registry/configmap.yaml
+  images:
+  - library/registry:2.8.2
+- name: zarf-agent
+  description: |
+    A Kubernetes mutating webhook to enable automated URL rewriting for container
+    images and git repository references in Kubernetes manifests. This prevents
+    the need to manually update URLs from their original sources to the Zarf-managed
+    docker registry and git server.
+  required: true
+  actions:
+    onCreate:
+      before:
+      - cmd: make init-package-local-agent AGENT_IMAGE_TAG="v0.26.4" ARCH="arm64"
+  manifests:
+  - name: zarf-agent
+    namespace: zarf
+    files:
+    - packages/zarf-agent/manifests/service.yaml
+    - packages/zarf-agent/manifests/secret.yaml
+    - packages/zarf-agent/manifests/deployment.yaml
+    - packages/zarf-agent/manifests/webhook.yaml
+  images:
+  - ghcr.io/defenseunicorns/zarf/agent:v0.26.4
+- name: logging
+  description: |
+    Deploys the Promtail Grafana & Loki (PGL) stack.
+    Aggregates logs from different containers and presents them in a web dashboard.
+    Recommended if no other logging stack is deployed in the cluster.
+  charts:
+  - name: loki-stack
+    releaseName: zarf-loki-stack
+    url: https://grafana.github.io/helm-charts
+    version: 2.9.10
+    namespace: zarf
+    valuesFiles:
+    - packages/logging-pgl/pgl-values.yaml
+  manifests:
+  - name: logging-connect
+    namespace: zarf
+    files:
+    - packages/logging-pgl/connect.yaml
+  images:
+  - docker.io/grafana/promtail:2.7.4
+  - grafana/grafana:8.3.5
+  - grafana/loki:2.6.1
+  - quay.io/kiwigrid/k8s-sidecar:1.19.2
+- name: git-server
+  description: |
+    Deploys Gitea to provide git repositories for Kubernetes configurations.
+    Required for GitOps deployments if no other git server is available.
+  actions:
+    onDeploy:
+      after:
+      - maxTotalSeconds: 60
+        maxRetries: 3
+        cmd: ./zarf internal create-read-only-gitea-user
+      - maxTotalSeconds: 60
+        maxRetries: 3
+        cmd: ./zarf internal create-artifact-registry-token
+  charts:
+  - name: gitea
+    releaseName: zarf-gitea
+    url: https://dl.gitea.io/charts
+    version: 7.0.4
+    namespace: zarf
+    valuesFiles:
+    - packages/gitea/gitea-values.yaml
+  manifests:
+  - name: git-connect
+    namespace: zarf
+    files:
+    - packages/gitea/connect.yaml
+  images:
+  - gitea/gitea:1.18.5-rootless
+variables:
+- name: K3S_ARGS
+  description: Arguments to pass to K3s
+  default: --disable traefik
+- name: REGISTRY_EXISTING_PVC
+  description: "Optional: Use an existing PVC for the registry instead of creating a new one. If this is set, the REGISTRY_PVC_SIZE variable will be ignored."
+- name: REGISTRY_PVC_SIZE
+  description: The size of the persistent volume claim for the registry
+  default: 20Gi
+- name: REGISTRY_PVC_ACCESS_MODE
+  description: The access mode of the persistent volume claim for the registry
+  default: ReadWriteOnce
+- name: REGISTRY_CPU_REQ
+  description: The CPU request for the registry
+  default: 100m
+- name: REGISTRY_MEM_REQ
+  description: The memory request for the registry
+  default: 256Mi
+- name: REGISTRY_CPU_LIMIT
+  description: The CPU limit for the registry
+  default: "3"
+- name: REGISTRY_MEM_LIMIT
+  description: The memory limit for the registry
+  default: 2Gi
+- name: REGISTRY_HPA_MIN
+  description: The minimum number of registry replicas
+  default: "1"
+- name: REGISTRY_HPA_MAX
+  description: The maximum number of registry replicas
+  default: "5"
+- name: REGISTRY_HPA_ENABLE
+  description: Enable the Horizontal Pod Autoscaler for the registry
+  default: "true"
+- name: GIT_SERVER_EXISTING_PVC
+  description: "Optional: Use an existing PVC for the git server instead of creating a new one. If this is set, the GIT_SERVER_PVC_SIZE variable will be ignored."
+- name: GIT_SERVER_PVC_SIZE
+  description: The size of the persistent volume claim for git server
+  default: 10Gi
+- name: GIT_SERVER_CPU_REQ
+  description: The CPU request for git server
+  default: 200m
+- name: GIT_SERVER_MEM_REQ
+  description: The memory request for git server
+  default: 512Mi
+- name: GIT_SERVER_CPU_LIMIT
+  description: The CPU limit for git server
+  default: "3"
+- name: GIT_SERVER_MEM_LIMIT
+  description: The memory limit for git server
+  default: 2Gi
+constants:
+- name: REGISTRY_IMAGE
+  value: library/registry
+- name: REGISTRY_IMAGE_TAG
+  value: 2.8.2
+- name: AGENT_IMAGE
+  value: defenseunicorns/zarf/agent
+- name: AGENT_IMAGE_TAG
+  value: v0.26.4
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This package has 9 artifacts with software bill-of-materials (SBOM) included. You can view them now
+in the zarf-sbom folder in this directory or to go directly to one, open this in your browser:
+/Users/cmwylie19/hello-zarf/zarf-sbom/sbom-viewer-docker.io_grafana_promtail_2.7.4.html
+
+* This directory will be removed after package deployment.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+? Deploy this Zarf package? Yes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+name: logging
+charts:
+- name: loki-stack
+  releaseName: zarf-loki-stack
+  url: https://grafana.github.io/helm-charts
+  version: 2.9.10
+  namespace: zarf
+  valuesFiles:
+  - packages/logging-pgl/pgl-values.yaml
+manifests:
+- name: logging-connect
+  namespace: zarf
+  files:
+  - packages/logging-pgl/connect.yaml
+images:
+- docker.io/grafana/promtail:2.7.4
+- grafana/grafana:8.3.5
+- grafana/loki:2.6.1
+- quay.io/kiwigrid/k8s-sidecar:1.19.2
+
+Deploys the Promtail Grafana & Loki (PGL) stack. Aggregates logs from different containers and
+presents them in a web dashboard. Recommended if no other logging stack is deployed in the cluster.
+? Deploy the logging component? No
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+name: git-server
+actions:
+  onDeploy:
+    after:
+    - maxTotalSeconds: 60
+      maxRetries: 3
+      cmd: ./zarf internal create-read-only-gitea-user
+    - maxTotalSeconds: 60
+      maxRetries: 3
+      cmd: ./zarf internal create-artifact-registry-token
+charts:
+- name: gitea
+  releaseName: zarf-gitea
+  url: https://dl.gitea.io/charts
+  version: 7.0.4
+  namespace: zarf
+  valuesFiles:
+  - packages/gitea/gitea-values.yaml
+manifests:
+- name: git-connect
+  namespace: zarf
+  files:
+  - packages/gitea/connect.yaml
+images:
+- gitea/gitea:1.18.5-rootless
+
+Deploys Gitea to provide git repositories for Kubernetes configurations. Required for GitOps
+deployments if no other git server is available.
+? Deploy the git-server component? No
+
+                                                                                       
+  📦 ZARF-INJECTOR COMPONENT                                                           
+                                                                                       
+
+  ✔  Copying 1 files                                                                                                          
+  ✔  Waiting for cluster connection (5m0s timeout)                                                                            
+  ✔  Gathering cluster information                                                                                            
+  ✔  Attempting to bootstrap the seed image into the cluster                                                                  
+
+                                                                                       
+  📦 ZARF-SEED-REGISTRY COMPONENT                                                      
+                                                                                       
+
+  ✔  Loading the Zarf State from the Kubernetes cluster                                                                       
+  ✔  Processing helm chart docker-registry:1.0.0 from Zarf-generated helm chart                                               
+
+                                                                                       
+  📦 ZARF-REGISTRY COMPONENT                                                           
+                                                                                       
+
+  ✔  Pushed 1 images to the zarf registry                                                                                     
+  ✔  Processing helm chart docker-registry:1.0.0 from Zarf-generated helm chart                                               
+  ✔  Starting helm chart generation registry-connect                                                                          
+  ✔  Processing helm chart raw-init-zarf-registry-registry-connect:0.1.1686229912 from Zarf-generated helm chart              
+  ✔  Starting helm chart generation kep-1755-registry-annotation                                                              
+  ⠋  Processing helm chart raw-init-zarf-registry-kep-1755-registry-annotation:0.1.1686229912 from Zarf-generated helm chart (  ✔  Processing helm chart raw-init-zarf-registry-kep-1755-registry-annotation:0.1.1686229912 from Zarf-generated helm chart  
+
+                                                                                       
+  📦 ZARF-AGENT COMPONENT                                                              
+                                                                                       
+
+  ✔  Pushed 1 images to the zarf registry                                                                                     
+  ✔  Starting helm chart generation zarf-agent                                                                                
+  ✔  Processing helm chart raw-init-zarf-agent-zarf-agent:0.1.1686229912 from Zarf-generated helm chart                       
+  ✔  Zarf deployment complete
+
+
+Application | Username  | Password                 | Connect
+Registry    | zarf-push | WjMx4wfduHbOz8Pk2UJ5oF56 | zarf connect registry
+```
+
+
+**What's going on behind the scenes**  
+### Nerd Notes
+you can skip to [the helm chart deployment of the webserver if you like](#deploy-helm-chart-with-zarf), as we have successfully initialized `zarf` in the cluster.  
+  
 
 After `zarf init` you will see an image registry pod in the zarf namespace, used to store images packed images  which are later saved in the final compressed tarball  (similar to a `docker save <image repo>/<user>/<container> -o <container>.tar`). There will be two replicas of the `agent-hook`, a mutating webhook that renames the images from the previous image registry like docker.io to the internal image registry deployed in the namespace. 
 
