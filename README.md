@@ -19,7 +19,7 @@ _This repo contains a basic webserver to be deployed by [Zarf](https://github.co
 
 For the easiest way to get started on mac:
 
-``bash
+```bash
 brew tap defenseunicorns/tap && brew install zarf
 ```
 
