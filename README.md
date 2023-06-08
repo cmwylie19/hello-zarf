@@ -1138,14 +1138,17 @@ components:
 EOF
 ```
 
-Notice, we MUST have correspoding names, and images from the helm chart's `Chart.yaml`, and clearly define the images in `ZarfPackageConfig`.
+We MUST have correspoding names, versions, and images from the helm chart's `Chart.yaml` file, and define the images in `ZarfPackageConfig`.
 
 Create the zarf package. (Press enter twice at the prompts to create the package and use the default of 0 for "Maximum Package Size")
 
 ```bash
 zarf package create hello-zarf-chart
+```
 
-# output 
+output 
+
+```bash
 Saving log file to
 /var/folders/v0/slmrzc4s6kx4n7jb77ch9fc80000gn/T/zarf-2023-06-07-18-12-58-3447967329.log
 
@@ -1293,7 +1296,11 @@ kubectl delete ns webserver
 
 ## Deploy Kubernetes manifests with Zarf
 
-We create a new ZarfPackageConfig to deploy the manifests. _Notice the structure is not quite as rigid when deploying manifests as there is no need for matching versions._
+We create a new ZarfPackageConfig to deploy the manifests.
+
+We MUST define images from kubernetes manifests in the images section of `ZarfPackageConfig`.
+
+Create the zarf package. (Press enter twice at the prompts to create the package and use the default of 0 for "Maximum Package Size")
 
 ```yaml
 cat << EOF > k8s/zarf.yaml
