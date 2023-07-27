@@ -1,0 +1,21 @@
+kind: ZarfPackageConfig
+metadata:
+  name: nginx-manifests
+  description: |
+    A Zarf package that deploys kubernetes manifests
+  version: 0.0.1
+components:
+  - name: nginx-folder
+    description: Does a kubectl create -f on the nginx folder
+    # prompt the user to create package?
+    required: true
+    # new
+    manifests:
+      - name: nginx-folder
+        namespace: default
+        # webserver deployment, svc
+        files:
+          - zarf-practice.yaml
+    # required to tell zarf where your image lives
+    images:
+      - docker.io/cmwylie19/custom-nginx

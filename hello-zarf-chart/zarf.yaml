@@ -1,0 +1,21 @@
+kind: ZarfPackageConfig
+metadata:
+  name: helm-chart
+  description: |
+    A Zarf package that deploys a helm chart
+  version: 0.0.1
+
+components:
+  - name: hello-zarf-chart
+    required: true
+    charts:
+      # Must match name in Chart.yaml
+      - name: hello-zarf-chart
+      # Must match version in Chart.yaml
+        version: 0.1.0
+        namespace: default
+        localPath: .
+    # Must include images in helm chart
+    images:
+      - docker.io/cmwylie19/hello-zarf
+      - nginx      

@@ -1141,7 +1141,7 @@ components:
     # Must include images in helm chart
     images:
       - docker.io/cmwylie19/hello-zarf
-      - busybox      
+      - nginx      
 EOF
 ```
 
