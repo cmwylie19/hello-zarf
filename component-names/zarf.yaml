@@ -11,6 +11,7 @@ variables:
     
 components:
   - name: helloword-zarf-chart
+    description: "###ZARF_COMPONENT_NAME###"
     required: true
     charts:
       # Must match name in Chart.yaml
@@ -26,6 +27,7 @@ components:
       - docker.io/cmwylie19/hello-zarf
       - nginx   
   - name: goodbyeworld-zarf-chart
+    description: "###ZARF_COMPONENT_NAME###"
     required: true
     charts:
       # Must match name in Chart.yaml

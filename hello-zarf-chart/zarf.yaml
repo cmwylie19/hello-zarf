@@ -13,7 +13,7 @@ components:
       - name: hello-zarf-chart
       # Must match version in Chart.yaml
         version: 0.1.0
-        namespace: default
+        namespace: webserver
         localPath: .
     # Must include images in helm chart
     images:
