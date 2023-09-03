@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: webserver
+spec: {}
+status: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: hello-zarf
+  name: hello-zarf
+  namespace: webserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-zarf
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: hello-zarf
+    spec:
+      containers:
+      - image: docker.io/cmwylie19/hello-zarf
+        name: hello-zarf
+        command: ["./hello-zarf"]
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: hello-zarf
+  name: hello-zarf
+  namespace: webserver
+spec:
+  ports:
+  - port: 8081
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app: hello-zarf
+status:
+  loadBalancer: {}
+
