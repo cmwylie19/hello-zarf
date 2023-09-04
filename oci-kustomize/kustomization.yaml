@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - zarf-practice.yaml
+
+commonLabels:
+  method: kustomize
+
+# images:
+#   - name: sometthing
+#     newTag: 1.0.0 
+
+namespace: webserver 
