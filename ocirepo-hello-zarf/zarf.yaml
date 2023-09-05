@@ -1,0 +1,20 @@
+kind: ZarfPackageConfig
+metadata:
+  name: ocirepo-hello-zarf
+  description: |
+    A Zarf package that tests Flux OCIRepo
+  version: 0.0.1
+components:
+  - name: flux-manifests
+    description: Does a kubectl create -f on the flux manifests
+    required: true
+    manifests:
+      - name: flux-manifests
+        namespace: flux-system
+        # webserver deployment, svc
+        files:
+          - zarf-practice.yaml
+    # required to tell zarf where your image lives
+    images:
+      - docker.io/cmwylie19/hello-zarf
+      - docker.io/cmwylie19/oci-manifests-hello-zarf
