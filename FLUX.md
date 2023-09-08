@@ -6,10 +6,10 @@ kubectl create -f https://github.com/fluxcd/flux2/releases/latest/download/insta
 
 ```yaml
 kubectl create -f -<<EOF
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
-  name: hello-zarf
+  name: hello-zarfs
   namespace: flux-system
 spec:
   interval: 10m
