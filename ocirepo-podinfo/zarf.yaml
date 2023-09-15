@@ -12,10 +12,15 @@ components:
       - name: flux-crds
         namespace: flux
         files:
-          - flux-install.yaml
+          - install.yaml
     images:
-      - ghcr.io/fluxcd/kustomize-controller:v0.27.1
-      - ghcr.io/fluxcd/source-controller:v0.28.0
+      - ghcr.io/fluxcd/helm-controller:v0.36.0
+      - ghcr.io/fluxcd/notification-controller:v1.1.0
+      - ghcr.io/fluxcd/source-controller:v1.1.0
+      - ghcr.io/fluxcd/kustomize-controller:v1.1.0
+      - ghcr.io/fluxcd/image-reflector-controller:v0.30.0
+      - ghcr.io/fluxcd/image-automation-controller:v0.36.0
+      
   - name: podinfo-via-flux-oci
     description: Does a kubectl create -f on the flux manifests
     required: true
@@ -28,4 +33,5 @@ components:
     # required to tell zarf where your image lives
     images:
       - ghcr.io/stefanprodan/manifests/podinfo
+      - ghcr.io/stefanprodan/podinfo:6.4.1
 
